@@ -25,7 +25,7 @@ public class Product {
     @Enumerated(EnumType.STRING)
     private TypeOfProduct type;
 
-    public enum TypeOfProduct{
+    public enum TypeOfProduct {
         CLOTHES,
         ACCESSORIES,
         SHOES,

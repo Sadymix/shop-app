@@ -47,7 +47,7 @@ public class ProductService {
     }
 
     public void deleteProduct(UUID id) {
-        if(!productRepo.existsById(id)) {
+        if (!productRepo.existsById(id)) {
             throw new ResourceNotFoundException("Product with " + id + " doesn't exist");
         }
         productRepo.deleteById(id);

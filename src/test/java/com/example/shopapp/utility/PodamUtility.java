@@ -8,11 +8,12 @@ import uk.co.jemos.podam.api.PodamFactoryImpl;
 public class PodamUtility {
 
     private static PodamFactory FACTORY = new PodamFactoryImpl();
+
     private PodamUtility() {
 
     }
 
-    public static <T> T makePojo(Class<T> tClass){
+    public static <T> T makePojo(Class<T> tClass) {
         return FACTORY.manufacturePojo(tClass);
     }
 }

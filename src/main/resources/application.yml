@@ -13,4 +13,3 @@ spring:
     show-sql: true
   liquibase:
     change-log: classpath:/changeLog.yaml
-
