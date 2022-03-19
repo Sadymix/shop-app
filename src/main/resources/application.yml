@@ -7,9 +7,18 @@ spring:
   jpa:
     hibernate:
       ddl-auto: none
+      naming:
+        physical-strategy: org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl
     properties:
-        dialect: org.hibernate.dialect.MySQL5InnoDBDialect
-        format_sql: true
-    show-sql: true
+      dialect: org.hibernate.dialect.MySQL57InnoDBDialect
+      format_sql: true
+    show-sql: false
   liquibase:
-    change-log: classpath:/changeLog.yaml
+    change-log: classpath:/changeLog.xml
+    enabled: true
+security:
+  client:
+    id: ClientId
+    secret: secret
+  token:
+    ttl: 3600
