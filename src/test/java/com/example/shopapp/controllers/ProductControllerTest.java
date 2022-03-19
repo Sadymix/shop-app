@@ -15,17 +15,13 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 
 import java.util.List;
-import java.util.UUID;
 
 import static com.example.shopapp.utility.PodamUtility.makePojo;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.hasSize;
-import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
-import static org.mockito.Mockito.verify;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -57,7 +53,7 @@ class ProductControllerTest {
     @Test
     void testGetProducts() {
         when(productService.getProducts()).thenReturn(List.of(PRODUCT_DTO));
-        mockMvc.perform(get("/products"))
+        mockMvc.perform(get("/api/products"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$", hasSize(1)));
         verify(productService).getProducts();
@@ -66,22 +62,22 @@ class ProductControllerTest {
     @SneakyThrows
     @Test
     void testGetProduct() {
-        var id = UUID.randomUUID();
-        when(productService.getProduct(any(UUID.class))).thenReturn(PRODUCT_DTO);
-        mockMvc.perform(get("/products/" + id))
+
+        when(productService.getProduct(1L)).thenReturn(PRODUCT_DTO);
+        mockMvc.perform(get("/api/products/1"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.name", equalTo(PRODUCT_DTO.getName())))
                 .andExpect(jsonPath("$.price").value(PRODUCT_DTO.getPrice()))
                 .andExpect(jsonPath("$.color", equalTo(PRODUCT_DTO.getColor())))
                 .andExpect(jsonPath("$.type").value(PRODUCT_DTO.getType().name()));
-        verify(productService).getProduct(id);
+        verify(productService).getProduct(1L);
     }
 
     @SneakyThrows
     @Test
     void testAddProduct() {
         when(productService.addProduct(any(ProductDto.class))).thenReturn(PRODUCT_DTO);
-        mockMvc.perform(post("/products")
+        mockMvc.perform(post("/api/products")
                 .content(objectMapper.writeValueAsString(PRODUCT_DTO))
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON))
@@ -96,9 +92,8 @@ class ProductControllerTest {
     @SneakyThrows
     @Test
     void testUpdateProduct() {
-        var id = UUID.randomUUID();
-        when(productService.updateProduct(id, PRODUCT_DTO)).thenReturn(PRODUCT_DTO);
-        mockMvc.perform(put("/products/" + id)
+        when(productService.updateProduct(1L, PRODUCT_DTO)).thenReturn(PRODUCT_DTO);
+        mockMvc.perform(put("/api/products/1")
                 .content(objectMapper.writeValueAsString(PRODUCT_DTO))
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON))
@@ -107,16 +102,15 @@ class ProductControllerTest {
                 .andExpect(jsonPath("$.price").value(PRODUCT_DTO.getPrice()))
                 .andExpect(jsonPath("$.color", equalTo(PRODUCT_DTO.getColor())))
                 .andExpect(jsonPath("$.type").value(PRODUCT_DTO.getType().name()));
-        verify(productService).updateProduct(id, PRODUCT_DTO);
+        verify(productService).updateProduct(1L, PRODUCT_DTO);
     }
 
     @SneakyThrows
     @Test
     void testDeleteProduct() {
-        var id = UUID.randomUUID();
-        doNothing().when(productService).deleteProduct(id);
-        mockMvc.perform(delete("/products/" + id))
+        doNothing().when(productService).deleteProduct(1L);
+        mockMvc.perform(delete("/api/products/1L"))
                 .andExpect(status().isOk());
-        verify(productService).deleteProduct(id);
+        verify(productService).deleteProduct(1L);
     }
 }
