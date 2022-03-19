@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
+import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
@@ -48,7 +49,7 @@ class ProductControllerTest {
                 .build();
     }
 
-
+    @WithMockUser(authorities = "USER")
     @SneakyThrows
     @Test
     void testGetProducts() {
@@ -59,12 +60,15 @@ class ProductControllerTest {
         verify(productService).getProducts();
     }
 
+    @WithMockUser(authorities = "ADMIN")
     @SneakyThrows
     @Test
     void testGetProduct() {
-
         when(productService.getProduct(1L)).thenReturn(PRODUCT_DTO);
-        mockMvc.perform(get("/api/products/1"))
+        mockMvc.perform(get("/api/products/1")
+                        .content(objectMapper.writeValueAsString(PRODUCT_DTO))
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.name", equalTo(PRODUCT_DTO.getName())))
                 .andExpect(jsonPath("$.price").value(PRODUCT_DTO.getPrice()))
@@ -73,6 +77,7 @@ class ProductControllerTest {
         verify(productService).getProduct(1L);
     }
 
+    @WithMockUser(authorities = "ADMIN")
     @SneakyThrows
     @Test
     void testAddProduct() {
@@ -89,6 +94,7 @@ class ProductControllerTest {
         verify(productService).addProduct(PRODUCT_DTO);
     }
 
+    @WithMockUser(authorities = "ADMIN")
     @SneakyThrows
     @Test
     void testUpdateProduct() {
@@ -105,11 +111,12 @@ class ProductControllerTest {
         verify(productService).updateProduct(1L, PRODUCT_DTO);
     }
 
+    @WithMockUser(authorities = "ADMIN")
     @SneakyThrows
     @Test
     void testDeleteProduct() {
         doNothing().when(productService).deleteProduct(1L);
-        mockMvc.perform(delete("/api/products/1L"))
+        mockMvc.perform(delete("/api/products/1"))
                 .andExpect(status().isOk());
         verify(productService).deleteProduct(1L);
     }
