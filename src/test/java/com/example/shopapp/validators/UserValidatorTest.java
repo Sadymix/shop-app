@@ -28,8 +28,9 @@ class UserValidatorTest {
 
     @ParameterizedTest
     @CsvSource({
-            "2,USER",
-            "2,STAFF"
+            "1,ADMIN",
+            "1,USER",
+            "2,ADMIN"
     })
     void testValidateSingleUser(Long id, String role) {
         var token = mock(PreAuthenticatedAuthenticationToken.class);
@@ -42,9 +43,8 @@ class UserValidatorTest {
 
     @ParameterizedTest
     @CsvSource({
-            "1,ADMIN",
-            "1,USER",
-            "2,ADMIN"
+            "2,USER",
+            "2,STAFF"
     })
     void throwsException_testValidateSingleUser(Long id, String role) {
        var token = mock(PreAuthenticatedAuthenticationToken.class);

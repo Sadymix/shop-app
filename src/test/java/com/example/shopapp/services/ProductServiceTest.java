@@ -71,8 +71,8 @@ class ProductServiceTest {
         when(productRepo.findById(1L)).thenReturn(Optional.ofNullable(PRODUCT));
         when(productRepo.save(any(Product.class))).thenReturn(PRODUCT);
         when(productMapper.toDto(any(Product.class))).thenReturn(PRODUCT_DTO);
-        var testProduct = productService.updateProduct(PRODUCT.getId(), PRODUCT_DTO);
-        verify(productRepo).findById(PRODUCT.getId());
+        var testProduct = productService.updateProduct(1L, PRODUCT_DTO);
+        verify(productRepo).findById(1L);
         verify(productRepo).save(PRODUCT);
         verify(productMapper).toDto(PRODUCT);
         assertThat(testProduct).isEqualTo(PRODUCT_DTO);
@@ -81,15 +81,15 @@ class ProductServiceTest {
     @Test
     void testDeleteProductIfIdExist() {
         when(productRepo.existsById(1L)).thenReturn(Boolean.TRUE);
-        doNothing().when(productRepo).deleteById(PRODUCT.getId());
-        productService.deleteProduct(PRODUCT.getId());
-        verify(productRepo).deleteById(PRODUCT.getId());
+        doNothing().when(productRepo).deleteById(1L);
+        productService.deleteProduct(1L);
+        verify(productRepo).deleteById(1L);
     }
 
     @Test
     void testDeleteProductIfIdDoesntExist() {
         when(productRepo.existsById(1L)).thenReturn(Boolean.FALSE);
-        assertThrows(ResourceNotFoundException.class, () -> productService.deleteProduct(PRODUCT.getId()));
-        verify(productRepo, times(0)).deleteById(PRODUCT.getId());
+        assertThrows(ResourceNotFoundException.class, () -> productService.deleteProduct(1L));
+        verify(productRepo, times(0)).deleteById(1L);
     }
 }
