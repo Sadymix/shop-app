@@ -14,11 +14,11 @@ import java.util.Objects;
 public class UserValidator {
 
     public void validateSingleUser(Long id, Authentication authentication) {
-        if(authentication.getPrincipal() instanceof User user) {
+        if (authentication.getPrincipal() instanceof User user) {
             var hasAdmin = user.getRoles().stream()
                     .map(Role::getName)
                     .anyMatch("ADMIN"::equals);
-            if(!(Objects.equals(user.getId(),id) || hasAdmin)) {
+            if (!(Objects.equals(user.getId(), id) || hasAdmin)) {
                 throw new IllegalUserException("The token doesn't have the permission to access single user.");
             }
         }
