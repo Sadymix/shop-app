@@ -8,7 +8,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
@@ -22,7 +21,7 @@ public class ProductService {
         return productMapper.toDtoList(allProducts);
     }
 
-    public ProductDto getProduct(UUID id) {
+    public ProductDto getProduct(Long id) {
         var product = productRepo
                 .findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Product with id " + id + " not found"));
@@ -34,7 +33,7 @@ public class ProductService {
         return productMapper.toDto(product);
     }
 
-    public ProductDto updateProduct(UUID id, ProductDto productDto) {
+    public ProductDto updateProduct(Long id, ProductDto productDto) {
         var product = productRepo
                 .findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Product with " + id + " doesn't exist"));
@@ -46,7 +45,7 @@ public class ProductService {
         return productMapper.toDto(productSave);
     }
 
-    public void deleteProduct(UUID id) {
+    public void deleteProduct(Long id) {
         if (!productRepo.existsById(id)) {
             throw new ResourceNotFoundException("Product with " + id + " doesn't exist");
         }
