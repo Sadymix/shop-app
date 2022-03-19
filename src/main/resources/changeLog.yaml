@@ -1,4 +1,0 @@
-databaseChangeLog:
-  - include:
-      file: database.2022-02-14/master.yaml
-      relativeToChangelogFile: true
