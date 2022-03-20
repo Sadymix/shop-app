@@ -1,9 +1,9 @@
 --liquibase formatted sql
---changeset kkorzeniewski:create-products-table
+--changeset kkorzeniewski:1
 CREATE TABLE products(
-    id BINARY(16) PRIMARY KEY,
+    id BIGINT AUTO_INCREMENT PRIMARY KEY,
     name VARCHAR(45) NOT NULL,
-    price DECIMAL(9,2) NOT NULL,
+    price DECIMAL(19,2) NOT NULL,
     color VARCHAR(45) NOT NULL,
     type ENUM('CLOTHES', 'ACCESSORIES', 'SHOES', 'SUPPLEMENTS', 'FOOD') NOT NULL
 );

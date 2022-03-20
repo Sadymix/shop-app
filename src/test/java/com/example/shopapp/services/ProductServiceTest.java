@@ -13,11 +13,10 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.List;
 import java.util.Optional;
-import java.util.UUID;
 
 import static com.example.shopapp.utility.PodamUtility.makePojo;
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
@@ -47,7 +46,7 @@ class ProductServiceTest {
 
     @Test
     void testGetProduct() {
-        when(productRepo.findById(PRODUCT.getId())).thenReturn(Optional.ofNullable(PRODUCT));
+        when(productRepo.findById(PRODUCT.getId())).thenReturn(Optional.of(PRODUCT));
         when(productMapper.toDto(PRODUCT)).thenReturn(PRODUCT_DTO);
         var testProduct = productService.getProduct(PRODUCT.getId());
         verify(productRepo).findById(PRODUCT.getId());
@@ -69,11 +68,11 @@ class ProductServiceTest {
 
     @Test
     void testUpdateProduct() {
-        when(productRepo.findById(any(UUID.class))).thenReturn(Optional.ofNullable(PRODUCT));
+        when(productRepo.findById(1L)).thenReturn(Optional.ofNullable(PRODUCT));
         when(productRepo.save(any(Product.class))).thenReturn(PRODUCT);
         when(productMapper.toDto(any(Product.class))).thenReturn(PRODUCT_DTO);
-        var testProduct = productService.updateProduct(PRODUCT.getId(), PRODUCT_DTO);
-        verify(productRepo).findById(PRODUCT.getId());
+        var testProduct = productService.updateProduct(1L, PRODUCT_DTO);
+        verify(productRepo).findById(1L);
         verify(productRepo).save(PRODUCT);
         verify(productMapper).toDto(PRODUCT);
         assertThat(testProduct).isEqualTo(PRODUCT_DTO);
@@ -81,16 +80,16 @@ class ProductServiceTest {
 
     @Test
     void testDeleteProductIfIdExist() {
-        when(productRepo.existsById(any(UUID.class))).thenReturn(Boolean.TRUE);
-        doNothing().when(productRepo).deleteById(PRODUCT.getId());
-        productService.deleteProduct(PRODUCT.getId());
-        verify(productRepo).deleteById(PRODUCT.getId());
+        when(productRepo.existsById(1L)).thenReturn(Boolean.TRUE);
+        doNothing().when(productRepo).deleteById(1L);
+        productService.deleteProduct(1L);
+        verify(productRepo).deleteById(1L);
     }
 
     @Test
     void testDeleteProductIfIdDoesntExist() {
-        when(productRepo.existsById(any(UUID.class))).thenReturn(Boolean.FALSE);
-        assertThrows(ResourceNotFoundException.class, () -> productService.deleteProduct(PRODUCT.getId()));
-        verify(productRepo, times(0)).deleteById(PRODUCT.getId());
+        when(productRepo.existsById(1L)).thenReturn(Boolean.FALSE);
+        assertThrows(ResourceNotFoundException.class, () -> productService.deleteProduct(1L));
+        verify(productRepo, times(0)).deleteById(1L);
     }
 }

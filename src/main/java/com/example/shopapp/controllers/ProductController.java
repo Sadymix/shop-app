@@ -3,26 +3,28 @@ package com.example.shopapp.controllers;
 import com.example.shopapp.models.dto.ProductDto;
 import com.example.shopapp.services.ProductService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.util.List;
-import java.util.UUID;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/products")
+@RequestMapping("/api/products")
+@PreAuthorize("hasAnyRole('ADMIN', 'STAFF')")
 public class ProductController {
 
     private final ProductService productService;
 
+    @PreAuthorize("hasAnyRole('ADMIN', 'STAFF', 'USER')")
     @GetMapping
     public List<ProductDto> getProducts() {
         return productService.getProducts();
     }
 
     @GetMapping("/{id}")
-    public ProductDto getProduct(@PathVariable UUID id) {
+    public ProductDto getProduct(@PathVariable Long id) {
         return productService.getProduct(id);
     }
 
@@ -32,12 +34,12 @@ public class ProductController {
     }
 
     @PutMapping("/{id}")
-    public ProductDto updateProduct(@Valid @RequestBody ProductDto productDto, @PathVariable UUID id) {
+    public ProductDto updateProduct(@Valid @RequestBody ProductDto productDto, @PathVariable Long id) {
         return productService.updateProduct(id, productDto);
     }
 
     @DeleteMapping("/{id}")
-    public String deleteProduct(@PathVariable UUID id) {
+    public String deleteProduct(@PathVariable Long id) {
         productService.deleteProduct(id);
         return "Deleted product of id: " + id;
     }
