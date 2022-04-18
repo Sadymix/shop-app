@@ -31,7 +31,7 @@ public class UserService implements UserDetailsService, AuthenticationUserDetail
     private final RoleRepo roleRepo;
     private final TokenStore tokenStore;
 
-    public UserDto getUser(Long id){
+    public UserDto getUser(Long id) {
         return userMapper.toDto(getUserById(id));
     }
 
@@ -84,7 +84,7 @@ public class UserService implements UserDetailsService, AuthenticationUserDetail
 
     private User getUserById(Long id) {
         return userRepo.findById(id).orElseThrow(() ->
-            new ResourceNotFoundException("User with id " + id +" not found")
+            new ResourceNotFoundException("User with id " + id + " not found")
         );
     }
 
