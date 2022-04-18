@@ -3,6 +3,7 @@ package com.example.shopapp.services;
 import com.example.shopapp.exceptions.ResourceNotFoundException;
 import com.example.shopapp.mappers.ProductMapperImpl;
 import com.example.shopapp.models.dto.ProductDto;
+import com.example.shopapp.models.entity.Product;
 import com.example.shopapp.repositories.ProductRepo;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -22,10 +23,7 @@ public class ProductService {
     }
 
     public ProductDto getProduct(Long id) {
-        var product = productRepo
-                .findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("Product with id " + id + " not found"));
-        return productMapper.toDto(product);
+        return productMapper.toDto(getProductById(id));
     }
 
     public ProductDto addProduct(ProductDto productDto) {
@@ -50,6 +48,12 @@ public class ProductService {
             throw new ResourceNotFoundException("Product with " + id + " doesn't exist");
         }
         productRepo.deleteById(id);
+    }
+
+    private Product getProductById(Long id) {
+        return productRepo.findById(id).orElseThrow(() ->
+                new ResourceNotFoundException("Product with id " + id + " not found")
+        );
     }
 
 }

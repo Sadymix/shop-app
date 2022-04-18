@@ -39,7 +39,7 @@ public class UserController {
     }
 
     @PutMapping("/{id}/disable")
-    public UserDto deactivateUser(@Valid @PathVariable Long  id) {
+    public UserDto deactivateUser(@Valid @PathVariable Long id) {
         return userService.deactivateUser(id);
     }
 

@@ -83,9 +83,9 @@ class ProductControllerTest {
     void testAddProduct() {
         when(productService.addProduct(any(ProductDto.class))).thenReturn(PRODUCT_DTO);
         mockMvc.perform(post("/api/products")
-                .content(objectMapper.writeValueAsString(PRODUCT_DTO))
-                .contentType(MediaType.APPLICATION_JSON)
-                .accept(MediaType.APPLICATION_JSON))
+                        .content(objectMapper.writeValueAsString(PRODUCT_DTO))
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.name", equalTo(PRODUCT_DTO.getName())))
                 .andExpect(jsonPath("$.price").value(PRODUCT_DTO.getPrice()))
@@ -100,9 +100,9 @@ class ProductControllerTest {
     void testUpdateProduct() {
         when(productService.updateProduct(1L, PRODUCT_DTO)).thenReturn(PRODUCT_DTO);
         mockMvc.perform(put("/api/products/1")
-                .content(objectMapper.writeValueAsString(PRODUCT_DTO))
-                .contentType(MediaType.APPLICATION_JSON)
-                .accept(MediaType.APPLICATION_JSON))
+                    .content(objectMapper.writeValueAsString(PRODUCT_DTO))
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.name", equalTo(PRODUCT_DTO.getName())))
                 .andExpect(jsonPath("$.price").value(PRODUCT_DTO.getPrice()))
