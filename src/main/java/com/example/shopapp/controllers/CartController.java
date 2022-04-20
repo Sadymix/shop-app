@@ -27,7 +27,7 @@ public class CartController {
         throw new IllegalStateException("The token does not contain authorized user data.");
     }
 
-    @PostMapping("add/{id}")
+    @PutMapping("/add/{id}")
     public CartDto addProductToLastCartForCurrentUser(@Valid @PathVariable Long id, Authentication authentication) {
         if (authentication.getPrincipal() instanceof User user) {
             return cartService.addProductToCart(id, user);
@@ -35,7 +35,7 @@ public class CartController {
         throw new IllegalStateException("The token does not contain authorized user data.");
     }
 
-    @PostMapping("remove/{id}")
+    @PutMapping("/remove/{id}")
     public CartDto removeProductFromCartForCurrentUser(@Valid @PathVariable Long id,
                                                        Authentication authentication) {
         if (authentication.getPrincipal() instanceof User user) {
