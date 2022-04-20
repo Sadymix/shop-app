@@ -30,21 +30,19 @@ public class CartService {
 
     public CartDto addProductToCart(Long id, User user) {
         var lastCart = getCart(user);
-        var product = productRepo.findById(id);
-        if (product.isEmpty()) {
-            throw new ResourceNotFoundException("Product with this id not exist in database.");
-        }
+        var product = productRepo.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Product with this id not exist in database."));
         if (lastCart == null) {
             var cart = new Cart();
             var products = new ArrayList<Product>();
-            products.add(product.get());
+            products.add(product);
             setCart(cart, products, user);
 
             var saveCart = cartRepo.save(cart);
             return cartMapper.toDto(saveCart);
         }
         var products = addAllFromCartToList(lastCart);
-        products.add(product.get());
+        products.add(product);
         setCart(lastCart, products, user);
         var saveCart = cartRepo.save(lastCart);
         return cartMapper.toDto(saveCart);
@@ -67,7 +65,8 @@ public class CartService {
     }
 
     private Cart getCart(User user) {
-        var cartsForCurrentUser = cartRepo.findAllByUserId(user.getId());
+        var cartsForCurrentUser = cartRepo
+                .findAllByUserId(user.getId());
         return cartsForCurrentUser.get(cartsForCurrentUser.size() - 1);
     }
 
