@@ -59,7 +59,6 @@ class CartControllerTest {
         mockMvc.perform(get("/api/cart")
                         .principal(authenticationToken))
                 .andExpect(status().isOk())
-                .andExpect(content().contentType("application/json"))
                 .andExpect(jsonPath("$.totalPrice", equalTo(CART_DTO.getTotalPrice().longValueExact())))
                 .andExpect(jsonPath("$.productDtoList.*", hasSize(CART_DTO.getProductDtoList().size())));
         verify(cartService).getLastCart(USER);
@@ -72,13 +71,12 @@ class CartControllerTest {
         when(cartService.addProductToCart(1L, USER)).thenReturn(CART_DTO);
         var authenticationToken = mock(PreAuthenticatedAuthenticationToken.class);
         when(authenticationToken.getPrincipal()).thenReturn(USER);
-        mockMvc.perform(post("/api/cart/add/1")
+        mockMvc.perform(put("/api/cart/add/1")
                         .content(objectMapper.writeValueAsString(USER))
                         .principal(authenticationToken)
                         .contentType(MediaType.APPLICATION_JSON)
                         .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
-                .andExpect(content().contentType("application/json"))
                 .andExpect(jsonPath("$.totalPrice", equalTo(CART_DTO.getTotalPrice().longValueExact())))
                 .andExpect(jsonPath("$.productDtoList.*", hasSize(CART_DTO.getProductDtoList().size())));
         verify(cartService).addProductToCart(1L, USER);
@@ -91,15 +89,14 @@ class CartControllerTest {
         when(cartService.removeProductFromCart(1L, USER)).thenReturn(CART_DTO);
         var authenticationToken = mock(PreAuthenticatedAuthenticationToken.class);
         when(authenticationToken.getPrincipal()).thenReturn(USER);
-        mockMvc.perform(post("/api/cart/remove/1")
+        mockMvc.perform(put("/api/cart/remove/1")
                         .content(objectMapper.writeValueAsString(USER))
                         .principal(authenticationToken)
                         .contentType(MediaType.APPLICATION_JSON)
                         .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
-                .andExpect(content().contentType("application/json"))
                 .andExpect(jsonPath("$.totalPrice", equalTo(CART_DTO.getTotalPrice().longValueExact())))
-                .andExpect(jsonPath("$.productDtoList.*", hasSize(CART_DTO.getProductDtoList().size())));
+                .andExpect(jsonPath("$.productDtoList", hasSize(CART_DTO.getProductDtoList().size())));
         verify(cartService).removeProductFromCart(1L, USER);
     }
 }
